@@ -41,8 +41,6 @@ async (accessToken, refreshToken, profile, done) => {
       $set: {
         user_id: BigInt(profile.id),
         steam_id: BigInt(steamConnection.id),
-        currency: 'USD',  // Default currency, change as needed
-        cooldown: 0,      // Default cooldown, change as needed
       },
       $setOnInsert: {
         value_history: []  // Initialize with empty array only on insert
