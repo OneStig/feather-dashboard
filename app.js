@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const path = require('path');
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
 const { MongoClient } = require('mongodb');
@@ -73,32 +74,36 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 // Routes
+app.use(express.static('public'));
 app.get('/', (req, res) => {
-  res.send('Welcome to Discord Steam Auth');
-});
-
-app.get('/auth/discord', passport.authenticate('discord'));
-
-app.get('/auth/discord/callback', 
-  passport.authenticate('discord', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/profile');
-  }
-);
-
-app.get('/profile', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json(req.user);
-  } else {
-    res.redirect('/auth/discord');
-  }
-});
-
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  });
+  
+  app.get('/auth/discord', passport.authenticate('discord'));
+  
+  app.get('/auth/discord/callback', 
+    passport.authenticate('discord', { failureRedirect: '/auth-failure' }),
+    (req, res) => {
+      res.redirect('/auth-success');
+    }
+  );
+  
+  app.get('/auth-success', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'auth-success.html'));
+  });
+  
+  app.get('/auth-failure', (req, res) => {
+    res.status(400).sendFile(path.join(__dirname, 'views', 'auth-failure.html'));
+  });
+  
+  app.get('/logout', (req, res) => {
+    req.logout((err) => {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
+  });
 
 // Start server
 const PORT = process.env.PORT || 3000;
