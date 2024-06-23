@@ -22,47 +22,48 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 passport.use(new DiscordStrategy({
-    clientID: process.env.DISCORD_CLIENT_ID,
-    clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    callbackURL: process.env.DISCORD_CALLBACK_URL,
-    scope: ['identify', 'connections']
-  },
-  async (accessToken, refreshToken, profile, done) => {
-    try {
-      const steamConnection = profile.connections.find(conn => conn.type === 'steam');
-      
-      // Prepare the update operation
-      let updateOperation = {
-        $setOnInsert: {
-          user_id: BigInt(profile.id),
-          currency: 'USD',  // Default currency, change as needed
-          cooldown: 0,      // Default cooldown, change as needed
-          value_history: []  // Initialize with empty array
-        }
-      };
-
-      // Only set steam_id if a Steam connection is found
-      if (steamConnection) {
-        updateOperation.$set = {
-          steam_id: BigInt(steamConnection.id)
-        };
-      }
-
-      // Perform the update operation
-      const result = await db.collection('users').updateOne(
-        { user_id: BigInt(profile.id) },
-        updateOperation,
-        { upsert: true }
-      );
-
-      // Fetch the updated/inserted user
-      const user = await db.collection('users').findOne({ user_id: BigInt(profile.id) });
-
-      done(null, user);
-    } catch (error) {
-      done(error);
+  clientID: process.env.DISCORD_CLIENT_ID,
+  clientSecret: process.env.DISCORD_CLIENT_SECRET,
+  callbackURL: process.env.DISCORD_CALLBACK_URL,
+  scope: ['identify', 'connections']
+},
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    const steamConnection = profile.connections.find(conn => conn.type === 'steam');
+    
+    if (!steamConnection) {
+      // No Steam account linked
+      return done(null, { error: 'no_steam_account' });
     }
+
+    // Prepare the update operation
+    let updateOperation = {
+      $set: {
+        user_id: BigInt(profile.id),
+        steam_id: BigInt(steamConnection.id),
+        currency: 'USD',  // Default currency, change as needed
+        cooldown: 0,      // Default cooldown, change as needed
+      },
+      $setOnInsert: {
+        value_history: []  // Initialize with empty array only on insert
+      }
+    };
+
+    // Perform the update operation
+    const result = await db.collection('users').updateOne(
+      { user_id: BigInt(profile.id) },
+      updateOperation,
+      { upsert: true }
+    );
+
+    // Fetch the updated/inserted user
+    const user = await db.collection('users').findOne({ user_id: BigInt(profile.id) });
+
+    done(null, user);
+  } catch (error) {
+    done(error);
   }
+}
 ));
 
 // Middleware
@@ -86,6 +87,9 @@ app.get('/', (req, res) => {
   app.get('/auth/discord/callback', 
     passport.authenticate('discord', { failureRedirect: '/auth-failure' }),
     (req, res) => {
+      if (req.user.error === 'no_steam_account') {
+        return res.redirect('/no-steam-account');
+      }
       res.redirect('/auth-success');
     }
   );
@@ -103,6 +107,10 @@ app.get('/', (req, res) => {
       if (err) { return next(err); }
       res.redirect('/');
     });
+  });
+
+  app.get('/no-steam-account', (req, res) => {
+    res.status(400).sendFile(path.join(__dirname, 'views', 'no-steam-account.html'));
   });
 
 // Start server
