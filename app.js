@@ -43,6 +43,8 @@ async (accessToken, refreshToken, profile, done) => {
         steam_id: BigInt(steamConnection.id),
       },
       $setOnInsert: {
+        currency: "USD",
+        cooldown: BigInt(0),
         value_history: []  // Initialize with empty array only on insert
       }
     };
