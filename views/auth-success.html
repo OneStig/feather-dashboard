@@ -3,11 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <title>Authentication Successful</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
 </head>
-<body>
-    <h1>Authentication Successful</h1>
-    <p>You can now return to Discord.</p>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center text-xl font-semibold text-gray-800">
+                    <img src="feather.png" alt="Logo" class="h-12 w-auto mr-0">
+                    <span>Feather</span>
+                </div>
+                <div class="space-x-4">
+                    <a href="https://github.com/OneStig/feather" class="text-gray-600 hover:text-gray-800">GitHub</a>
+                    <a href="https://discord.gg/hh9v4eF" class="text-gray-600 hover:text-gray-800">Support Server</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+            <div id="success-message" class="mb-6">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">Success!</h2>
+                <p class="text-gray-600">Your steam account has been linked.</p>
+            </div>
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-4">What's next?</h3>
+                <ul class="list-disc list-inside text-gray-600">
+                    <li>Use the <code class="bg-gray-200 text-blue-500 px-1 rounded">/inventory</code> command</li>
+                    <li>Unlink your steam account with <code class="bg-gray-200 text-blue-500 px-1 rounded">/unlink</code></li>
+                </ul>
+            </div>
+            <div class="mt-8">
+                <a href="https://discord.gg/hh9v4eF" class="inline-block bg-blue-600 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">Support Server</a>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

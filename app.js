@@ -110,7 +110,7 @@ app.get('/', (req, res) => {
   });
 
   app.get('/no-steam-account', (req, res) => {
-    res.status(400).sendFile(path.join(__dirname, 'views', 'no-steam-account.html'));
+    res.status(400).sendFile(path.join(__dirname, 'views', 'auth-failure.html'));
   });
 
 // Start server

@@ -3,11 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    <title>Discord Steam Auth</title>
+    <title>Modern Landing Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
 </head>
-<body>
-    <h1>Feather Steam Verification</h1>
-    <a href="/auth/discord">Login with Discord</a>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center text-xl font-semibold text-gray-800">
+                    <img src="feather.png" alt="Logo" class="h-12 w-auto mr-0">
+                    <span>Feather</span>
+                </div>
+                <div class="space-x-4">
+                    <a href="https://github.com/OneStig/feather" class="text-gray-600 hover:text-gray-800">GitHub</a>
+                    <a href="https://discord.gg/hh9v4eF" class="text-gray-600 hover:text-gray-800">Support Server</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <section class="text-center mb-20 py-20">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Feather</h1>
+            <p class="text-xl text-gray-600">Feather (Previously BOT Chicken) is an <a href="https://github.com/OneStig/feather" class="text-blue-600">open-source</a> Discord bot for price checking CS2 items and inventories.</p>
+            <div class="mt-6">
+                <a href="https://discord.com/oauth2/authorize?client_id=286697179949694977&permissions=8&scope=applications.commands%20bot" class="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600">Invite Me!</a>
+                <a href="/auth/discord" class="ml-4 bg-gray-500 text-white py-3 px-6 rounded-lg hover:bg-gray-600">Link Steam</a>
+            </div>
+        </section>
+
+        <!-- <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Feature 1</h2>
+                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Feature 2</h2>
+                <p class="text-gray-600">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Feature 3</h2>
+                <p class="text-gray-600">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+            </div>
+        </section> -->
+    </main>
 </body>
 </html>
